@@ -68,58 +68,7 @@
 <!-- wangEditor -->
 <script type="text/javascript" src="//unpkg.com/wangeditor/dist/wangEditor.min.js"></script>
 <script th:src="@{/admin/dist/js/public.js}"></script>
-<script th:src="@{/admin/dist/js/newbee_mall_goods_edit.js}"></script>
+<script th:src="@{/admin/dist/js/adminUpload.js}"></script>
 </body>
-
-<script type="text/javascript">
-    $(function () {
-        $("#jqGrid").jqGrid({
-            url: '/admin/goods/upload',
-            datatype: "json",
-            colModel: [
-                {label: 'insertList', name: 'insertId', index: 'insertId', width: 120},
-                {label: 'updateList', name: 'updateId', index: 'updateId', width: 120}
-            ],
-            height: 560,
-            rowNum: 10,
-            rowList: [10, 20, 50],
-            styleUI: 'Bootstrap',
-            loadtext: '信息读取中...',
-            rownumbers: false,
-            rownumWidth: 20,
-            autowidth: true,
-            multiselect: true,
-            pager: "#jqGridPager",
-            jsonReader: {
-                root: "data.list",
-                page: "data.currPage",
-                total: "data.totalPage",
-                records: "data.totalCount"
-            },
-            prmNames: {
-                page: "page",
-                rows: "limit",
-                order: "order",
-            },
-            gridComplete: function () {
-                //隐藏grid底部滚动条
-                $("#jqGrid").closest(".ui-jqgrid-bdiv").css({"overflow-x": "hidden"});
-            }
-        });
-
-        $(window).resize(function () {
-            $("#jqGrid").setGridWidth($(".card-body").width());
-        });
-
-        function reload() {
-            var page = $("#jqGrid").jqGrid('getGridParam', 'page');
-            $("#jqGrid").jqGrid('setGridParam', {
-                page: page
-            }).trigger("reloadGrid");
-        }
-    })
-
-
-</script>
 
 </html>

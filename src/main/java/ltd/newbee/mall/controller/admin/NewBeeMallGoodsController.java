@@ -310,7 +310,7 @@ public class NewBeeMallGoodsController {
                     list.add(goods);
                 }
             } while (!line.equals(""));
-//            for (int n = 0; n < list.size(); n++) {
+
             List<Long> goodsIds = list.stream().map(NewBeeMallGoods::getGoodsId).collect(Collectors.toList());
             List<NewBeeMallGoods> newBeeMallGoodsList = newBeeMallGoodsService.getNewBeeMallGoodsByIds(goodsIds);
             List<Long> updateId = newBeeMallGoodsList.stream().map(NewBeeMallGoods::getGoodsId).collect(Collectors.toList());
@@ -326,7 +326,7 @@ public class NewBeeMallGoodsController {
             bufferedReader.close();
 
             Result resultSuccess = ResultGenerator.genSuccessResult();
-            resultSuccess.setData(NewBeeMallUtils.getHost(new URI(httpServletRequest.getRequestURL() + "")) + "/upload/" + newFileName);
+            resultSuccess.setData(list);
             return resultSuccess;
         } catch (IOException | ParseException e) {
             e.printStackTrace();
