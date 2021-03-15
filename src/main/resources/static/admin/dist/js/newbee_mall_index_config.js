@@ -173,11 +173,81 @@ function deleteConfig () {
     ;
 }
 
+// function getGoodsId () {
+//     var goodsIds = []
+//     $('input:checkbox:checked').parent().next().next().next().next().next().map( function() {
+//         ids.push($( this ).text())
+//         return goodsIds;
+//     })
+//
+//     console.log(ids);
+// }
 
-function reset() {
-    $("#configName").val('');
-    $("#redirectUrl").val('##');
-    $("#configRank").val(0);
-    $("#goodsId").val(0);
-    $('#edit-error-msg').css("display", "none");
-}
+$('.btn-download').click(function () {
+
+    var goodsIds = []
+    $('input:checkbox:checked').parent().next().next().next().next().next().map(function () {
+        goodsIds.push($(this).text())
+        return goodsIds;
+    })
+
+        if (goodsIds == null) {
+            return
+        }
+        $.ajax({
+            type: 'POST',
+            url: "/admin/indexConfigs/download",
+            contentType: "application/json",
+            data: JSON.stringify(goodsIds),
+            success: function (result) {
+                if (result.resultCode == 200) {
+                    swal("download success", {
+                        icon: "success",
+                    })
+                } else {
+                    swal(result.message, {
+                        icon: "error",
+                    });
+                }
+            }
+        })
+    });
+
+$('.btn-upload').click(function () {
+
+    var goodsIds = []
+    $('input:checkbox:checked').parent().next().next().next().next().next().map(function () {
+        goodsIds.push($(this).text())
+        return goodsIds;
+    })
+
+    if (goodsIds == null) {
+        return
+    }
+    $.ajax({
+        type: 'POST',
+        url: "/admin/indexConfigs/upload",
+        contentType: "application/json",
+        data: JSON.stringify(goodsIds),
+        success: function (result) {
+            if (result.resultCode == 200) {
+                swal("upload success", {
+                    icon: "success",
+                })
+            } else {
+                swal(result.message, {
+                    icon: "error",
+                });
+            }
+        }
+    })
+});
+
+
+    function reset() {
+        $("#configName").val('');
+        $("#redirectUrl").val('##');
+        $("#configRank").val(0);
+        $("#goodsId").val(0);
+        $('#edit-error-msg').css("display", "none");
+    }

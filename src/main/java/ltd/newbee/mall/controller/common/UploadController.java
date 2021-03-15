@@ -15,17 +15,13 @@ import ltd.newbee.mall.util.ResultGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
@@ -43,6 +39,7 @@ public class UploadController {
 
     @Autowired
     private StandardServletMultipartResolver standardServletMultipartResolver;
+
 
     @PostMapping({"/upload/file"})
     @ResponseBody
@@ -65,6 +62,16 @@ public class UploadController {
                 }
             }
             file.transferTo(destFile);
+//            InputStream fileStream2 = new FileInputStream("c:\\download\\goods.csv");
+//            Reader reader = new InputStreamReader(fileStream2, "utf-8");
+//            BufferedReader bufferedReader = new BufferedReader(reader);
+//            String line = "";
+//            bufferedReader.readLine();
+//            do  {
+//                line = bufferedReader.readLine();
+//                System.out.println(line);
+//            } while (line.equals(""));
+
             Result resultSuccess = ResultGenerator.genSuccessResult();
             resultSuccess.setData(NewBeeMallUtils.getHost(new URI(httpServletRequest.getRequestURL() + "")) + "/upload/" + newFileName);
             return resultSuccess;

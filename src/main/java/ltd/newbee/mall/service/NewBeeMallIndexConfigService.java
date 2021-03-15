@@ -46,5 +46,8 @@ public interface NewBeeMallIndexConfigService {
      */
     List<NewBeeMallIndexConfigGoodsVO> getConfigHotGoodsesForIndex(int configType, int number);
 
+
     Boolean deleteBatch(Long[] ids);
+
+
 }

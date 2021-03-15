@@ -11,24 +11,36 @@ package ltd.newbee.mall.controller.admin;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.common.NewBeeMallCategoryLevelEnum;
 import ltd.newbee.mall.common.ServiceResultEnum;
+import ltd.newbee.mall.dao.NewBeeMallGoodsMapper;
 import ltd.newbee.mall.entity.GoodsCategory;
 import ltd.newbee.mall.entity.NewBeeMallGoods;
+import ltd.newbee.mall.entity.NewBeeMallGoodsData;
 import ltd.newbee.mall.service.NewBeeMallCategoryService;
 import ltd.newbee.mall.service.NewBeeMallGoodsService;
+import ltd.newbee.mall.util.NewBeeMallUtils;
 import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.Result;
 import ltd.newbee.mall.util.ResultGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static ltd.newbee.mall.common.Constants.FILE_UPLOAD;
 
 /**
  * @author 13
@@ -40,10 +52,15 @@ import java.util.Objects;
 @RequestMapping("/admin")
 public class NewBeeMallGoodsController {
 
+    @Autowired
+    private NewBeeMallGoodsMapper goodsMapper;
     @Resource
     private NewBeeMallGoodsService newBeeMallGoodsService;
     @Resource
     private NewBeeMallCategoryService newBeeMallCategoryService;
+    @Autowired
+    private StandardServletMultipartResolver standardServletMultipartResolver;
+
 
     @GetMapping("/goods")
     public String goodsPage(HttpServletRequest request) {
@@ -228,4 +245,96 @@ public class NewBeeMallGoodsController {
         }
     }
 
+    @RequestMapping(value = "/goods/upload", method = RequestMethod.POST)
+//    @PostMapping(value = "/goods/upload")
+    @ResponseBody
+    public Result fileUpload(HttpServletRequest httpServletRequest, @RequestParam("file") MultipartFile file) throws URISyntaxException, ParseException {
+
+        String dateStr = "Tue Oct 13 11:41:59 JST 2020";
+        DateFormat formatter = new SimpleDateFormat("E MMM dd hh:mm:ss 'JST' yyyy", Locale.ENGLISH);
+        Date date = formatter.parse(dateStr);
+
+        int i = 0;
+        List<NewBeeMallGoods> list = new ArrayList<>();
+        String[] arr = null;
+        String fileName = file.getOriginalFilename();
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+
+        StringBuilder tempName = new StringBuilder();
+        tempName.append(fileName).append(suffixName);
+        String newFileName = tempName.toString();
+        File fileDirectory = new File(FILE_UPLOAD);
+        //创建文件
+        File destFile = new File(FILE_UPLOAD + newFileName);
+        try {
+            if (!fileDirectory.exists()) {
+                if (!fileDirectory.mkdir()) {
+                    throw new IOException("文件夹创建失败,路径为：" + fileDirectory);
+                }
+            }
+            InputStream fileStream2 = file.getInputStream();
+            Reader reader = new InputStreamReader(fileStream2, "utf-8");
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            String line = "";
+            bufferedReader.readLine();
+            do {
+                line = bufferedReader.readLine();
+                System.out.println(line);
+                if (line == null) {
+                    break;
+                }
+                if (i == 0) {
+                    arr = line.split(",");
+                }
+                NewBeeMallGoods goods = new NewBeeMallGoods();
+                if (arr[0] != null && !arr[0].equals("")) {
+                    goods.setGoodsId(Long.parseLong(arr[0]));
+                    goods.setGoodsName(arr[1]);
+                    goods.setGoodsIntro(arr[2]);
+                    goods.setGoodsCategoryId(Long.parseLong(arr[3]));
+                    goods.setGoodsCoverImg(arr[4]);
+                    goods.setGoodsCarousel(arr[5]);
+                    if (arr[6] != null && !arr[6].equals("")) {
+                        goods.setGoodsDetailContent(arr[6]);
+                    }
+//                    goods.setGoodsDetailContent("123");
+                    goods.setOriginalPrice(Integer.parseInt(arr[7]));
+                    goods.setSellingPrice(Integer.parseInt(arr[8]));
+                    goods.setStockNum(Integer.parseInt(arr[9]));
+                    goods.setTag(arr[10]);
+                    goods.setGoodsSellStatus(Byte.parseByte(arr[11]));
+                    goods.setCreateUser(Integer.parseInt(arr[12]));
+                    goods.setCreateTime(formatter.parse(arr[13]));
+                    goods.setUpdateUser(Integer.parseInt(arr[14]));
+                    goods.setUpdateTime(formatter.parse(arr[15]));
+                    list.add(goods);
+                }
+            } while (!line.equals(""));
+//            for (int n = 0; n < list.size(); n++) {
+            List<Long> goodsIds = list.stream().map(NewBeeMallGoods::getGoodsId).collect(Collectors.toList());
+            List<NewBeeMallGoods> newBeeMallGoodsList = newBeeMallGoodsService.getNewBeeMallGoodsByIds(goodsIds);
+            List<Long> updateId = newBeeMallGoodsList.stream().map(NewBeeMallGoods::getGoodsId).collect(Collectors.toList());
+            if (!newBeeMallGoodsList.isEmpty()) {
+                newBeeMallGoodsService.updateNewBeeMallGoodsByUpload(list);
+            }
+            List<Long> insertId = goodsIds.stream().filter(item -> !updateId.contains(item)).collect(Collectors.toList());
+            List<NewBeeMallGoods> insertList = list.stream().filter(item -> !updateId.contains(item.getGoodsId())).collect(Collectors.toList());
+//                List<NewBeeMallGoods> insertList = list.stream().filter(item->!newBeeMallGoodsList.contains(item)).collect(Collectors.toList());
+            if (!insertList.isEmpty()) {
+                newBeeMallGoodsService.saveNewBeeMallGoodsByUpload(insertList);
+            }
+            bufferedReader.close();
+
+            Result resultSuccess = ResultGenerator.genSuccessResult();
+            resultSuccess.setData(NewBeeMallUtils.getHost(new URI(httpServletRequest.getRequestURL() + "")) + "/upload/" + newFileName);
+            return resultSuccess;
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("文件上传失败");
+        }
+    }
 }
+
+
+
+

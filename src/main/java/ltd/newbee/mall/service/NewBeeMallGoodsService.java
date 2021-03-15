@@ -12,6 +12,7 @@ import ltd.newbee.mall.entity.NewBeeMallGoods;
 import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.PageResult;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public interface NewBeeMallGoodsService {
@@ -61,7 +62,7 @@ public interface NewBeeMallGoodsService {
      * @param ids
      * @return
      */
-    Boolean batchUpdateSellStatus(Long[] ids,int sellStatus);
+    Boolean batchUpdateSellStatus(Long[] ids, int sellStatus);
 
     /**
      * 商品搜索
@@ -71,5 +72,48 @@ public interface NewBeeMallGoodsService {
      */
     PageResult searchNewBeeMallGoods(PageQueryUtil pageUtil);
 
+    /**
+     * 获取商品详情
+     * 2021/03/03
+     *
+     * @param ids
+     * @return
+     */
+    List<NewBeeMallGoods> getNewBeeMallGoodsByIds(List<Long> ids);
 
+    /**
+     * download
+     * 2021/03/03
+     *
+     * @param
+     * @return
+     */
+    void fileWriter(List<NewBeeMallGoods> list);
+
+
+    /**
+     * 更新商品信息
+     * 2021/03/04
+     *
+     * @param ids
+     * @return
+     */
+    int batchUpdateGoods(List<NewBeeMallGoods> newBeeMallGoods);
+
+
+    /**
+     * 新增上传商品
+     *
+     * @param newBeeMallGoods
+     * @return
+     */
+    List<NewBeeMallGoods> saveNewBeeMallGoodsByUpload(List<NewBeeMallGoods> newBeeMallGoods);
+
+    /**
+     * 修改上传商品信息
+     *
+     * @param newBeeMallGoods
+     * @return
+     */
+    String updateNewBeeMallGoodsByUpload(List<NewBeeMallGoods> newBeeMallGoods);
 }

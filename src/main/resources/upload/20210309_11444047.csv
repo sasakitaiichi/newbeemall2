@@ -1,0 +1,3 @@
+goods_id, goods_name,goods_intro,goods_category_id,goods_cover_img,goods_carousel,original_price,selling_price,stock_num,tag,goods_sell_status,create_user,create_time,update_user,update_time
+10195,索尼 WH-1000XM3 头戴式耳机,高解析度无线蓝牙降噪（触控面板 智能降噪 长久续航）黑色,20,/goods-img/0dc503b2-90a2-4971-9723-c085a1844b76.jpg,http://localhost:28089/goods-img/0dc503b2-90a2-4971-9723-c085a1844b76.jpg,2899,2599,987,智能降噪 长久续航,0,0,Wed Sep 18 14:21:35 JST 2019,0,Tue Oct 13 11:41:59 JST 2020
+10180,Apple AirPods 配充电盒,苹果蓝牙耳机,0,/goods-img/64768a8d-0664-4b29-88c9-2626578ffbd1.jpg,/goods-img/64768a8d-0664-4b29-88c9-2626578ffbd1.jpg,1246,1246,995,妙出新境界,0,0,Wed Sep 18 14:21:35 JST 2019,0,Tue Oct 13 11:41:59 JST 2020

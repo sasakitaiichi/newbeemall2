@@ -8,6 +8,7 @@
  */
 package ltd.newbee.mall.service.impl;
 
+import com.fasterxml.jackson.databind.MappingIterator;
 import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.controller.vo.NewBeeMallSearchGoodsVO;
 import ltd.newbee.mall.dao.NewBeeMallGoodsMapper;
@@ -16,10 +17,13 @@ import ltd.newbee.mall.service.NewBeeMallGoodsService;
 import ltd.newbee.mall.util.BeanUtil;
 import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.PageResult;
+import ltd.newbee.mall.util.ResultGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +33,9 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
 
     @Autowired
     private NewBeeMallGoodsMapper goodsMapper;
+
+    public NewBeeMallGoodsServiceImpl() throws FileNotFoundException {
+    }
 
     @Override
     public PageResult getNewBeeMallGoodsPage(PageQueryUtil pageUtil) {
@@ -71,6 +78,7 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
         return goodsMapper.selectByPrimaryKey(id);
     }
 
+
     @Override
     public Boolean batchUpdateSellStatus(Long[] ids, int sellStatus) {
         return goodsMapper.batchUpdateSellStatus(ids, sellStatus) > 0;
@@ -101,8 +109,80 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
         return pageResult;
     }
 
+    @Override
+    public List<NewBeeMallGoods> getNewBeeMallGoodsByIds(List<Long> ids) {
+        List<NewBeeMallGoods> newBeeMallGoods = goodsMapper.selectByPrimaryKeys(ids);
+        return newBeeMallGoods;
+    }
+
+    /**
+     * 获取商品详情
+     *
+     * @param list@return
+     */
+    @Override
+    public void fileWriter(List<NewBeeMallGoods> list) {
+        final String comma = ",";
+        String header = "goods_id" + "," + " goods_name" + "," + "goods_intro" + "," + "goods_category_id" + "," + "goods_cover_img" + "," + "goods_carousel" + "," + "goods_detail_content" +"," + "original_price"
+                + "," + "selling_price" + "," + "stock_num" + "," + "tag" + "," + "goods_sell_status" + "," + "create_user" + "," + "create_time" + "," + "update_user" + "," + "update_time\r\n";
+        try {
+            File file = new File("c:\\download\\goods.csv");
+
+            FileWriter filewriter = new FileWriter(file);
+
+            filewriter.write(header);
+            list.forEach(goods -> {
+                try {
+                    String str = goods.getGoodsId() + comma + goods.getGoodsName() + comma + goods.getGoodsIntro() + comma + goods.getGoodsCategoryId() + comma + goods.getGoodsCoverImg() + comma + goods.getGoodsCarousel() + comma + goods.getGoodsDetailContent() + comma + goods.getOriginalPrice()
+                            + comma + goods.getSellingPrice() + comma + goods.getStockNum() + comma + goods.getTag() + comma + goods.getGoodsSellStatus() + comma + goods.getCreateUser() + comma + goods.getCreateTime() + comma + goods.getUpdateUser() + comma + goods.getUpdateTime();
+                    filewriter.write(str + "\r\n");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            filewriter.close();
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
 
 
+    @Override
+    public int batchUpdateGoods(List<NewBeeMallGoods> newBeeMallGoods) {
+        int count = goodsMapper.batchUpdateGoods(newBeeMallGoods);
+        return count;
+    }
 
+    //added 2021/03/08 sasaki for file upload
+    @Override
+    public List<NewBeeMallGoods> saveNewBeeMallGoodsByUpload(List<NewBeeMallGoods> newBeeMallGoods) {
+        if (!CollectionUtils.isEmpty(newBeeMallGoods)) {
+            goodsMapper.InsertByUpload(newBeeMallGoods);
+        }
+        return newBeeMallGoods;
+    }
+
+    //added 2021/03/08 sasaki for file upload
+    @Override
+    public String updateNewBeeMallGoodsByUpload(List<NewBeeMallGoods> newBeeMallGoods) {
+        int count = 0;
+        if (!newBeeMallGoods.isEmpty()) {
+            count = goodsMapper.batchUpdateGoods(newBeeMallGoods);
+        }
+        if (count > 0) {
+            return ServiceResultEnum.SUCCESS.getResult();
+        }
+        return ServiceResultEnum.DB_ERROR.getResult();
+    }
 }
+
+
+
+
+
+
+
+
+
+
 

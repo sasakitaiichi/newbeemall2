@@ -9,10 +9,34 @@
 package ltd.newbee.mall.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.Date;
 
+@JsonPropertyOrder({ "goodsId", "goodsName", "goodsIntro", "goodsCategoryId","goodsCoverImg","goodsCarousel","originalPrice","sellingPrice"
+        ,"stockNum","tag","goodsSellStatus","createUser","update_user","update_time" })
+
 public class NewBeeMallGoods {
+
+    public Long getInsertId() {
+        return insertId;
+    }
+
+    public void setInsertId(Long insertId) {
+        this.insertId = insertId;
+    }
+
+    public Long getUpdateId() {
+        return updateId;
+    }
+
+    public void setUpdateId(Long updateId) {
+        this.updateId = updateId;
+    }
+
+    private Long insertId;
+
+    private Long updateId;
 
     private Long goodsId;
 

@@ -52,6 +52,10 @@ public interface NewBeeMallGoodsMapper {
     //added 2021/02/28 sasaki for ランキング
     List<NewBeeMallGoods> selectByHotGoods(List<Long> goodsIds);
 
+    //added 2021/03/04 sasaki for ランキング
+    int batchUpdateGoods(List<NewBeeMallGoods> list);
 
+    //added 2021/03/03 sasaki for file upload
+    int InsertByUpload(@Param("newBeeMallGoodsList") List<NewBeeMallGoods> newBeeMallGoodsList);
 
 }

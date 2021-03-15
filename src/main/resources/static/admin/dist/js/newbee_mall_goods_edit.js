@@ -70,6 +70,41 @@ $(function () {
     });
 });
 
+new AjaxUpload('#uploadFile', {
+    action: '/admin/goods/upload',
+    name: 'file',
+    autoSubmit: true,
+    responseType: "json",
+    onSubmit: function (file, extension) {
+        if (!(extension && /^(jpg|jpeg|png|gif|csv)$/.test(extension.toLowerCase()))) {
+            alert('只支持jpg、png、gif、csv格式的文件！');
+            return false;
+        }
+    },
+    onComplete: function (file, r) {
+        if (r != null && r.resultCode == 200) {
+            $("#insertId").attr("src", r.data);
+            $("#updateId").attr("src", r.data);
+
+            var insertId = []
+            $('input:checkbox:checked').parent().next().map(function () {
+                insertId.push($(this).text())
+                return insertId;
+            })
+
+            var updateId = []
+            $('input:checkbox:checked').parent().next().next().map(function () {
+                updateId.push($(this).text())
+                return updateId;
+            })
+            return false;
+        } else {
+            alert("error");
+        }
+    }
+});
+
+
 $('#saveButton').click(function () {
     var goodsId = $('#goodsId').val();
     var goodsCategoryId = $('#levelThree option:selected').val();

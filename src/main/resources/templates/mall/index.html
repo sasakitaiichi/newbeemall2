@@ -108,16 +108,15 @@
         <h2>ランキング</h2>
         <ul>
             <th:block th:unless="${#lists.isEmpty(rankingGoodses)}">
-                <th:block th:each="rankeGoodses}">
-<!--                <th:block th:each="rankeGoodses : ${rankingGoodses}">-->
-<!--                    <li>-->
-<!--                        <a th:href="@{'/goods/detail/'+${rankeGoodses.goodsId}}">-->
-<!--                            <img th:src="@{${rankeGoodses.goodsCoverImg}}" th:alt="${rankeGoodses.goodsName}">-->
-<!--                            <p class="name" th:text="${rankeGoodses.goodsName}">NewBeeMall</p>-->
-<!--                            <p class="discount" th:text="${rankeGoodses.goodsIntro}">NewBeeMall</p>-->
-<!--                            <p class="item_price" th:text="${rankeGoodses.sellingPrice}">NewBeeMall</p>-->
-<!--                        </a>-->
-<!--                    </li>-->
+                <th:block th:each="rankeGoodses : ${rankingGoodses}">
+                    <li>
+                        <a th:href="@{'/goods/detail/'+${rankeGoodses.goodsId}}">
+                            <img th:src="@{${rankeGoodses.goodsCoverImg}}" th:alt="${rankeGoodses.goodsName}">
+                            <p class="name" th:text="${rankeGoodses.goodsName}">NewBeeMall</p>
+                            <p class="discount" th:text="${rankeGoodses.goodsIntro}">NewBeeMall</p>
+                            <p class="item_price" th:text="${rankeGoodses.sellingPrice}">NewBeeMall</p>
+                        </a>
+                    </li>
                 </th:block>
             </th:block>
         </ul>

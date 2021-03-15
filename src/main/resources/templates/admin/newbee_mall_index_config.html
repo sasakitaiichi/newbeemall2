@@ -42,6 +42,17 @@
                             <button class="btn btn-danger" onclick="deleteConfig()"><i
                                     class="fa fa-trash-o"></i>&nbsp;删除
                             </button>
+
+                            <!--added by sasaki 2021/03/02 for download-->
+                            <button class="btn btn-download"><i
+                                    class="fa fa-trash-o"></i>&nbsp;Download
+                            </button>
+
+                            <!--added by sasaki 2021/03/02 for upload-->
+                            <button class="btn btn-upload"><i
+                                    class="fa fa-trash-o"></i>&nbsp;Upload
+                            </button>
+
                         </div>
                         <br>
                         <table id="jqGrid" class="table table-bordered">
@@ -70,7 +81,8 @@
                                         错误信息展示栏。
                                     </div>
                                 </div>
-                                <input type="hidden" class="form-control" id="indexConfigModaconfigId" name="indexConfigModaconfigId">
+                                <input type="hidden" class="form-control" id="indexConfigModaconfigId"
+                                       name="indexConfigModaconfigId">
                                 <input type="hidden" id="configType" th:value="${configType}">
                                 <div class="form-group">
                                     <label for="configName" class="control-label">配置项显示字符:</label>
@@ -108,6 +120,8 @@
     <!-- 引入页脚footer-fragment -->
     <div th:replace="admin/footer::footer-fragment"></div>
 </div>
+
+
 <!-- jQuery -->
 <script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
 <!-- Bootstrap 4 -->
@@ -122,5 +136,6 @@
 <script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
 <script th:src="@{/admin/dist/js/public.js}"></script>
 <script th:src="@{/admin/dist/js/newbee_mall_index_config.js}"></script>
+
 </body>
 </html>

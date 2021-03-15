@@ -23,7 +23,7 @@
     </resultMap>
     <sql id="Base_Column_List">
         goods_id
-        , goods_name, goods_intro,goods_category_id, goods_cover_img, goods_carousel, original_price,
+        , goods_name, goods_intro,goods_category_id, goods_cover_img, goods_carousel, goods_detail_content, original_price,
     selling_price, stock_num, tag, goods_sell_status, create_user, create_time, update_user, 
     update_time
     </sql>
@@ -140,6 +140,8 @@
     <select id="selectByPrimaryKeys" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
         from tb_newbee_mall_goods_info
         where goods_id in
         <foreach item="id" collection="list" open="(" separator="," close=")">
@@ -376,7 +378,7 @@
         where goods_id = #{goodsId,jdbcType=BIGINT}
     </update>
 
-    <select id="selectBySellingPrice"  resultMap="BaseResultMap">
+    <select id="selectBySellingPrice" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from tb_newbee_mall_goods_info
@@ -385,27 +387,71 @@
             #{id}
         </foreach>
         <if test="orderBy != null and order == 'asc'">
-            order by selling_price  asc
+            order by selling_price asc
         </if>
         <if test="orderBy != null and order == 'desc'">
-            order by selling_price  desc
+            order by selling_price desc
         </if>
     </select>
 
-<!--    added 2021/02/28 sasaki for ランキング-->
-    <select id="selectByHotGoods" resultType="map">
-        SELECT tb_newbee_mall_goods_info.goods_id,tb_newbee_mall_goods_info.goods_name,tb_newbee_mall_goods_info.goods_intro,tb_newbee_mall_goods_info.selling_price,tb_newbee_mall_goods_info.goods_category_id,tb_newbee_mall_goods_info.goods_cover_img,tb_newbee_mall_goods_info.goods_sell_status,
-               tb_newbee_mall_goods_info.create_time
+    <!--    added 2021/02/28 sasaki for ランキング-->
+    <select id="selectByHotGoods" resultMap="BaseResultMap">
+        SELECT tb_newbee_mall_goods_info.goods_id,
+               tb_newbee_mall_goods_info.goods_name,
+               tb_newbee_mall_goods_info.goods_intro,
+               tb_newbee_mall_goods_info.goods_category_id,
+               tb_newbee_mall_goods_info.goods_cover_img,
+               tb_newbee_mall_goods_info.goods_carousel,
+               tb_newbee_mall_goods_info.original_price,
+               tb_newbee_mall_goods_info.selling_price,
+               tb_newbee_mall_goods_info.stock_num,
+               tb_newbee_mall_goods_info.tag,
+               tb_newbee_mall_goods_info.goods_sell_status,
+               tb_newbee_mall_goods_info.create_user,
+               tb_newbee_mall_goods_info.create_time,
+               tb_newbee_mall_goods_info.update_user,
+               tb_newbee_mall_goods_info.update_time
         from tb_newbee_mall_goods_info
-                 inner join tb_newbee_mall_order_item on tb_newbee_mall_goods_info.goods_id = tb_newbee_mall_order_item.goods_id
+                 inner join tb_newbee_mall_order_item
+                            on tb_newbee_mall_goods_info.goods_id = tb_newbee_mall_order_item.goods_id
         where tb_newbee_mall_goods_info.goods_category_id = any
               (select category_id from newbee_mall_db.tb_newbee_mall_goods_category where parent_id = 19)
-        order by tb_newbee_mall_order_item.goods_count asc
-        limit 5
+        order by tb_newbee_mall_order_item.goods_count asc limit 5
     </select>
 
+    <update id="batchUpdateGoods" parameterType="java.util.List">
+        <foreach collection="list" item="goods" separator=";">
+            update tb_newbee_mall_goods_info
+            set goods_name = #{goods.goodsName,jdbcType = VARCHAR},
+                goods_intro = #{goods.goodsIntro,jdbcType=VARCHAR},
+                goods_category_id = #{goods.goodsCategoryId,jdbcType=BIGINT},
+                goods_cover_img = #{goods.goodsCoverImg,jdbcType=VARCHAR},
+                goods_carousel = #{goods.goodsCarousel,jdbcType=VARCHAR},
+                goods_detail_content = #{goods.goodsDetailContent,jdbcType=LONGNVARCHAR},
+                original_price = #{goods.originalPrice,jdbcType=INTEGER},
+                selling_price = #{goods.sellingPrice,jdbcType=INTEGER},
+                stock_num = #{goods.stockNum,jdbcType=INTEGER},
+                tag = #{goods.tag,jdbcType=VARCHAR},
+                goods_sell_status = #{goods.goodsSellStatus,jdbcType=TINYINT},
+                create_user = #{goods.createUser,jdbcType=INTEGER},
+                create_time = #{goods.createTime,jdbcType=TIMESTAMP},
+                update_user = #{goods.updateUser,jdbcType=INTEGER},
+                update_time = #{goods.updateTime,jdbcType=TIMESTAMP}
+            where goods_id = #{goods.goodsId,jdbcType = BIGINT}
+        </foreach>
+    </update>
 
-
+    <!--    addedBy sasaki 2021/03/08 for file upload-->
+    <insert id="InsertByUpload">
+        INSERT INTO tb_newbee_mall_goods_info(goods_id, goods_name, goods_intro,goods_category_id, goods_cover_img, goods_carousel,goods_detail_content, original_price,
+        selling_price, stock_num, tag, goods_sell_status, create_user, create_time, update_user,
+        update_time)
+        VALUES
+        <foreach collection="newBeeMallGoodsList" item="goods" separator=",">
+            (#{goods.goodsId},#{goods.goodsName},#{goods.goodsIntro},#{goods.goodsCategoryId},#{goods.goodsCoverImg},#{goods.goodsCarousel},#{goods.goodsDetailContent},#{goods.originalPrice},#{goods.sellingPrice},#{goods.stockNum},#{goods.tag}, #{goods.goodsSellStatus}, #{goods.createUser}, #{goods.createTime}, #{goods.updateUser},
+            #{goods.updateTime})
+        </foreach>
+    </insert>
 
 
 </mapper>
