@@ -3,8 +3,8 @@ $(function () {
         // url: '/admin/goods/upload',
         datatype: "json",
         colModel: [
-            {label: 'insertList', name: 'insertId', index: 'insertId', width: 120},
-            {label: 'updateList', name: 'updateId', index: 'updateId', width: 120}
+            {label: 'id', name: 'insertId', index: 'insertId', width: 120},
+            {label: 'process', name: 'updateId', index: 'updateId', width: 120}
         ],
         height: 560,
         rowNum: 10,
@@ -57,11 +57,50 @@ $(function () {
         },
         onComplete: function (file, r) {
             if (r != null && r.resultCode == 200) {
-                $("#goodsId").attr("src", r.data);
+
+                var el;
+                var insert = [];
+                var update = [];
+                var goodsIds = r.data;
+                var length = r.data.length;
+
+                for (var i = 0; i < length; i++) {
+                    // console.log(goodsIds[i])
+                    if (goodsIds[i].idFlag == true) {
+                       update = '<tr role="row" id="1" tabIndex="-1" className="jqgrow ui-row-ltr">'
+                           +'<td role = \"gridcell\"style = \"text-align:center;width: 45px;\"className = \"jqgrid-multibox\"aria - describedby = \"jqGrid_cb\" > '
+                           +'<inputrole = \"checkbox\"type = \"checkbox\"id = \"jqg_jqGrid_12\"className = \"cbox checkbox\"name = \"jqg_jqGrid_12\" >'
+                           +'</td>'
+                           +'<td role=\"idList\" style=\"\" title=' + goodsIds[i].id + 'aria-describedby=\"jqGrid_redirectUrl\">'
+                           + goodsIds[i].id
+                           +'<td role=\"updateList\" style=\"\" title=' + "update" + 'aria-describedby=\"jqGrid_redirectUrl\">'
+                           + "update"
+                           +'</td>'
+                           + '</tr>'
+                    }
+                    if (goodsIds[i].idFlag == false) {
+                        insert = '<tr role="row" id="2" tabIndex="-1" className="jqgrow ui-row-ltr">'
+                            +'<td role = \"gridcell\"style = \"text-align:center;width: 45px;\"className = \"jqgrid-multibox\"aria - describedby = \"jqGrid_cb\" > '
+                            +'<inputrole = \"checkbox\"type = \"checkbox\"id = \"jqg_jqGrid_12\"className = \"cbox checkbox\"name = \"jqg_jqGrid_12\" >'
+                            +'</td>'
+                            +'<td role=\"idList\" style=\"\" title=' + goodsIds[i].id + 'aria-describedby=\"jqGrid_redirectUrl\">'
+                            + goodsIds[i].id
+                            +'<td role=\"updateList\" style=\"\" title=' + "insert" + 'aria-describedby=\"jqGrid_redirectUrl\">'
+                            + "insert"
+                            +'</td>'
+                            + '</tr>'
+                    }
+                    el = el+update+insert;
+                }
+                $('#jqGrid').find('tbody').html(el);
+
+
+
+
                 return false;
             } else {
                 alert("error");
             }
         }
-    });
+    })
 })

@@ -15,6 +15,7 @@ import ltd.newbee.mall.dao.NewBeeMallGoodsMapper;
 import ltd.newbee.mall.entity.GoodsCategory;
 import ltd.newbee.mall.entity.NewBeeMallGoods;
 import ltd.newbee.mall.entity.NewBeeMallGoodsData;
+import ltd.newbee.mall.entity.UpdateVo;
 import ltd.newbee.mall.service.NewBeeMallCategoryService;
 import ltd.newbee.mall.service.NewBeeMallGoodsService;
 import ltd.newbee.mall.util.NewBeeMallUtils;
@@ -250,6 +251,8 @@ public class NewBeeMallGoodsController {
     @ResponseBody
     public Result fileUpload(HttpServletRequest httpServletRequest, @RequestParam("file") MultipartFile file) throws URISyntaxException, ParseException {
 
+        boolean idFlag;
+        String result;
         String dateStr = "Tue Oct 13 11:41:59 JST 2020";
         DateFormat formatter = new SimpleDateFormat("E MMM dd hh:mm:ss 'JST' yyyy", Locale.ENGLISH);
         Date date = formatter.parse(dateStr);
@@ -325,8 +328,23 @@ public class NewBeeMallGoodsController {
             }
             bufferedReader.close();
 
+            List<UpdateVo> list1 = new ArrayList<>();
+            for (int n = 0;n<updateId.size();n++) {
+                UpdateVo updateVo = new UpdateVo();
+                updateVo.setId(updateId.get(n));
+                updateVo.setIdFlag(true);
+                list1.add(updateVo);
+            }
+
+            for (int n = 0;n<insertId.size();n++) {
+                UpdateVo updateVo = new UpdateVo();
+                updateVo.setId(insertId.get(n));
+                updateVo.setIdFlag(false);
+                list1.add(updateVo);
+            }
+
             Result resultSuccess = ResultGenerator.genSuccessResult();
-            resultSuccess.setData(list);
+            resultSuccess.setData(list1);
             return resultSuccess;
         } catch (IOException | ParseException e) {
             e.printStackTrace();

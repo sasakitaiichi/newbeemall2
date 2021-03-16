@@ -18,6 +18,16 @@ import java.util.Date;
 
 public class NewBeeMallGoods {
 
+    public boolean getIdFlag() {
+        return this.idFlag;
+    }
+
+    public void setIdFlag(boolean idFlag) {
+        this.idFlag = idFlag;
+    }
+
+    private boolean idFlag;
+
     public Long getInsertId() {
         return insertId;
     }
