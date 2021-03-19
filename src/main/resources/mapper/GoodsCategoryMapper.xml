@@ -209,4 +209,39 @@
       update_user = #{updateUser,jdbcType=INTEGER}
     where category_id = #{categoryId,jdbcType=BIGINT}
   </update>
+
+<!--    added by sasaki 2021/03/19 for goodsStore-->
+    <select id = "selectByCategoryLevelTwo" resultMap="BaseResultMap">
+    select
+    category_id,
+    parent_id,
+    category_name,
+    category_rank,
+    is_deleted,
+    create_time,
+    create_user,
+    update_time,
+    update_user
+    from tb_newbee_mall_goods_category
+    where category_level = 2 limit 5
+    </select>
+
+<!--added by sasaki 2021/03/19 for goodsStore-->
+    <select id="selectLevelThreeList" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+            a.category_id,
+            a.category_level,
+            a.parent_id,
+            a.category_name,
+            a.category_rank,
+            a.is_deleted,
+            a.create_time,
+            a.create_user,
+            a.update_time,
+            a.update_user
+        FROM tb_newbee_mall_goods_category as a
+                 left join tb_newbee_mall_goods_category as b
+                           on A.category_id = B.parent_id
+        where A.category_level ='3';
+    </select>
 </mapper>

@@ -36,4 +36,10 @@ public interface GoodsCategoryMapper {
     int deleteBatch(Integer[] ids);
 
     List<GoodsCategory> selectByLevelAndParentIdsAndNumber(@Param("parentIds") List<Long> parentIds, @Param("categoryLevel") int categoryLevel, @Param("number") int number);
+
+//    added by sasaki 2021/03/19 for goodsStore
+    List<GoodsCategory> selectByCategoryLevelTwo();
+
+//    added by sasaki 2021/03/19 for goodsStore
+    List<GoodsCategory> selectLevelThreeList();
 }

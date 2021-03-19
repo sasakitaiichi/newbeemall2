@@ -10,8 +10,12 @@ package ltd.newbee.mall.service.impl;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import ltd.newbee.mall.common.ServiceResultEnum;
+import ltd.newbee.mall.controller.vo.GoodsStoreVO;
 import ltd.newbee.mall.controller.vo.NewBeeMallSearchGoodsVO;
+import ltd.newbee.mall.dao.GoodsCategoryMapper;
 import ltd.newbee.mall.dao.NewBeeMallGoodsMapper;
+import ltd.newbee.mall.entity.GoodsCategory;
+import ltd.newbee.mall.entity.GoodsStore;
 import ltd.newbee.mall.entity.NewBeeMallGoods;
 import ltd.newbee.mall.service.NewBeeMallGoodsService;
 import ltd.newbee.mall.util.BeanUtil;
@@ -27,12 +31,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
 
     @Autowired
     private NewBeeMallGoodsMapper goodsMapper;
+    @Autowired
+    private GoodsCategoryMapper goodsCategoryMapper;
 
     public NewBeeMallGoodsServiceImpl() throws FileNotFoundException {
     }
@@ -123,7 +130,7 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
     @Override
     public void fileWriter(List<NewBeeMallGoods> list) {
         final String comma = ",";
-        String header = "goods_id" + "," + " goods_name" + "," + "goods_intro" + "," + "goods_category_id" + "," + "goods_cover_img" + "," + "goods_carousel" + "," + "goods_detail_content" +"," + "original_price"
+        String header = "goods_id" + "," + " goods_name" + "," + "goods_intro" + "," + "goods_category_id" + "," + "goods_cover_img" + "," + "goods_carousel" + "," + "goods_detail_content" + "," + "original_price"
                 + "," + "selling_price" + "," + "stock_num" + "," + "tag" + "," + "goods_sell_status" + "," + "create_user" + "," + "create_time" + "," + "update_user" + "," + "update_time\r\n";
         try {
             File file = new File("c:\\download\\goods.csv");
@@ -174,6 +181,40 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
         }
         return ServiceResultEnum.DB_ERROR.getResult();
     }
+
+    @Override
+    public List<GoodsStore> getGoodsByCategoryId(List<GoodsCategory> list) {
+
+        List<GoodsStore> goodsStore = new ArrayList<>();
+
+        List<String> imgList = new ArrayList();
+
+        List<GoodsCategory> goodsCategoryList = goodsCategoryMapper.selectLevelThreeList();
+
+        List<Long> categoryIds = goodsCategoryList.stream().map(GoodsCategory::getCategoryId).collect(Collectors.toList());
+
+        List<NewBeeMallGoods> newBeeMallGoods = goodsMapper.findNewBeeMallGoodsByCategoryIds(categoryIds);
+
+        List<Long> goodsIds = newBeeMallGoods.stream().map(NewBeeMallGoods::getGoodsId).collect(Collectors.toList());
+
+        for (int i= 0;i<goodsIds.size();i++) {
+
+            List<String> img = goodsMapper.selectImgByGoodsId(goodsIds.get(i));
+
+            for (int g = 0;g < img.size();g++) {
+                imgList.add(img.get(g));
+            }
+        }
+
+        GoodsStore temp = new GoodsStore();
+        for (int n=0;n<goodsIds.size();n++) {
+            temp.setId(goodsIds.get(n));
+            temp.setImg(imgList);
+            goodsStore.add(temp);
+        }
+       return goodsStore;
+    }
+
 }
 
 

@@ -56,4 +56,15 @@ public interface NewBeeMallCategoryService {
      * @return
      */
     List<GoodsCategory> selectByLevelAndParentIdsAndNumber(List<Long> parentIds, int categoryLevel);
+
+//    added by sasaki 2021/03/19 for goodsStore
+    /**
+     * 根据level获取分类列表
+     *
+     * @param
+     * @param
+     * @return
+     */
+    List<GoodsCategory> fetchSecLeveLCateList();
+
 }

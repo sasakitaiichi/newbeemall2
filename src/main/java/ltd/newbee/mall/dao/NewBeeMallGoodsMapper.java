@@ -44,10 +44,10 @@ public interface NewBeeMallGoodsMapper {
 
     int updateStockNum(@Param("stockNumDTOS") List<StockNumDTO> stockNumDTOS);
 
-    int batchUpdateSellStatus(@Param("orderIds")Long[] orderIds,@Param("sellStatus") int sellStatus);
+    int batchUpdateSellStatus(@Param("orderIds") Long[] orderIds, @Param("sellStatus") int sellStatus);
 
     //added 2021/02/22 order by price
-    List<NewBeeMallGoods> selectBySellingPrice(List<Long> list,String order,String orderBy);
+    List<NewBeeMallGoods> selectBySellingPrice(List<Long> list, String order, String orderBy);
 
     //added 2021/02/28 sasaki for ランキング
     List<NewBeeMallGoods> selectByHotGoods(List<Long> goodsIds);
@@ -57,5 +57,11 @@ public interface NewBeeMallGoodsMapper {
 
     //added 2021/03/03 sasaki for file upload
     int InsertByUpload(@Param("newBeeMallGoodsList") List<NewBeeMallGoods> newBeeMallGoodsList);
+
+    //added by sasaki 2021/03/19 for goodsStore
+    List<NewBeeMallGoods> findNewBeeMallGoodsByCategoryIds(List<Long> categoryId);
+
+    //added by sasaki 2021/03/19 for goodsStore
+    List<String> selectImgByGoodsId(Long goodsId);
 
 }

@@ -33,6 +33,7 @@ public class AdminController {
     @Resource
     private AdminUserService adminUserService;
 
+
     @GetMapping({"/upload"})
     public String upload() {
         return "admin/upload";

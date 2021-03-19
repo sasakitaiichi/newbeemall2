@@ -8,6 +8,8 @@
  */
 package ltd.newbee.mall.service;
 
+import ltd.newbee.mall.entity.GoodsCategory;
+import ltd.newbee.mall.entity.GoodsStore;
 import ltd.newbee.mall.entity.NewBeeMallGoods;
 import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.PageResult;
@@ -116,4 +118,13 @@ public interface NewBeeMallGoodsService {
      * @return
      */
     String updateNewBeeMallGoodsByUpload(List<NewBeeMallGoods> newBeeMallGoods);
+
+//    added by sasaki 2021/03/19 for goodsStore
+    /**
+     *
+     *
+     * @param list
+     * @return
+     */
+    List<GoodsStore> getGoodsByCategoryId(List<GoodsCategory> list);
 }
