@@ -59,7 +59,7 @@ public interface NewBeeMallGoodsMapper {
     int InsertByUpload(@Param("newBeeMallGoodsList") List<NewBeeMallGoods> newBeeMallGoodsList);
 
     //added by sasaki 2021/03/19 for goodsStore
-    List<NewBeeMallGoods> findNewBeeMallGoodsByCategoryIds(List<Long> categoryId);
+    List<NewBeeMallGoods> findNewBeeMallGoodsByCategoryId(Long categoryId);
 
     //added by sasaki 2021/03/19 for goodsStore
     List<String> selectImgByGoodsId(Long goodsId);

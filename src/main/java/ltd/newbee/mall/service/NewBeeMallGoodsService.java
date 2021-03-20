@@ -126,5 +126,5 @@ public interface NewBeeMallGoodsService {
      * @param list
      * @return
      */
-    List<GoodsStore> getGoodsByCategoryId(List<GoodsCategory> list);
+    List<GoodsStore> getGoodsByCategoryId(GoodsCategory goodsCategory);
 }
