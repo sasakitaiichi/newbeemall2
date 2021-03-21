@@ -123,7 +123,7 @@ public interface NewBeeMallGoodsService {
     /**
      *
      *
-     * @param list
+     * @param
      * @return
      */
     List<GoodsStore> getGoodsByCategoryId(GoodsCategory goodsCategory);

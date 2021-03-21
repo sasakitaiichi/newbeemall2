@@ -99,8 +99,7 @@ public class ShoppingCartController {
 
     @RequestMapping(value = "/shop-cart-order", method = RequestMethod.GET)
     @ResponseBody
-    public Result cartListPageOrder(@RequestParam Map<String, Object> params, HttpServletRequest request,
-                                    HttpSession httpSession) {
+    public Result cartListPageOrder(@RequestParam Map<String, Object> params, HttpSession httpSession) {
         String order = "";
         String orderBy = "";
         NewBeeMallUserVO user = (NewBeeMallUserVO) httpSession.getAttribute(Constants.MALL_USER_SESSION_KEY);

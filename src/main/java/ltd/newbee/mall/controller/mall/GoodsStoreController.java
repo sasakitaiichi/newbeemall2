@@ -7,16 +7,17 @@ import ltd.newbee.mall.entity.GoodsStore;
 import ltd.newbee.mall.entity.NewBeeMallGoods;
 import ltd.newbee.mall.service.NewBeeMallCategoryService;
 import ltd.newbee.mall.service.NewBeeMallGoodsService;
+import ltd.newbee.mall.util.Result;
+import ltd.newbee.mall.util.ResultGenerator;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -29,8 +30,14 @@ public class GoodsStoreController {
     @Resource
     private NewBeeMallGoodsMapper goodsMapper;
 
-    @GetMapping("/recommend")
-    public String GoodsStore(HttpServletRequest request,Long categoryId) {
+    @GetMapping({"/recommend"})
+    public String recommend() {
+        return "mall/recommend";
+    }
+
+    @RequestMapping(value = "/recommend", method = RequestMethod.POST)
+    @ResponseBody
+    public Result GoodsStore(HttpServletRequest request, Long categoryId) {
 
         List<Long> categoryIdList;
 
@@ -52,10 +59,10 @@ public class GoodsStoreController {
                  goodsStore = newBeeMallGoodsService.getGoodsByCategoryId(goodsCategoryList.get(n+1));
             }
         }
+        Map result = new HashMap();
+        result.put("goodsCategoryList",goodsCategoryList);
+        result.put("goodsStore",goodsStore);
 
-        request.setAttribute("goodsCategoryList", goodsCategoryList);
-        request.setAttribute("goodsStore", goodsStore);
-
-        return "/mall/recommend";
+        return ResultGenerator.genSuccessResult(result);
     }
 }
