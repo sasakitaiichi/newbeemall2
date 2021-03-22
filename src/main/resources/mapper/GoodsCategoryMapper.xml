@@ -242,6 +242,6 @@
         FROM tb_newbee_mall_goods_category as a
                  left join tb_newbee_mall_goods_category as b
                            on A.category_id = B.parent_id
-        where A.category_level ='3';
+        where A.parent_id = #{parentId,jdbcType=BIGINT};
     </select>
 </mapper>

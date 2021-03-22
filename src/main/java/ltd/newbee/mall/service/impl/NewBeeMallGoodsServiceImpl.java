@@ -183,47 +183,66 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
     }
 
     @Override
-    public List<GoodsStore> getGoodsByCategoryId(GoodsCategory goodsCategory) {
+    public List<GoodsStoreVO> getGoodsByCategoryId(Long categoryId) {
 
-        List<Long> goodsIds = null;
+        List<GoodsStoreVO> goodsStoreVO = new ArrayList<>();
 
         List<NewBeeMallGoods> newBeeMallGoods = null;
 
         List<GoodsStore> goodsStore = new ArrayList<>();
 
-        List<String> imgList = new ArrayList();
+        Long parentId = categoryId;
 
-        List<GoodsCategory> goodsCategoryList = goodsCategoryMapper.selectLevelThreeList();
+        List<GoodsCategory> goodsCategoryList = goodsCategoryMapper.selectLevelThreeList(parentId);
 
-        List<Long> categoryIds = goodsCategoryList.stream().map(GoodsCategory::getCategoryId).collect(Collectors.toList());
+        for (int n = 0; n < goodsCategoryList.size(); n++) {
 
-        for (int n = 0; n<categoryIds.size();n++) {
+            newBeeMallGoods = goodsMapper.findNewBeeMallGoodsByCategoryId((goodsCategoryList.get(n)).getCategoryId());
 
-            newBeeMallGoods = goodsMapper.findNewBeeMallGoodsByCategoryId(categoryIds.get(n));
+//            if (!newBeeMallGoods.isEmpty()) {
+//
+//                Long goodsId = newBeeMallGoods.get(n).getGoodsId();
+//
+//                goodsIds.add(goodsId);
+//            }
+//
+//            for (int i = 0; i < newBeeMallGoods.size(); i++) {
+//
+//                List<String> img = goodsMapper.selectImgByGoodsId((newBeeMallGoods.get(i)).getGoodsId());
+//
+////                System.out.println("aa");
+////                GoodsStore temp = new GoodsStore();
+////                if (img.size() > 0){//没有图片的不显示
+////                    temp.setId((img.get(i)).get);
+////                    temp.setImg(imgList);
+////                    GoodsStore.add(goodsStrore);
+////                    GoodsStoreVO = BeanUtil.copyList(GoodsStore, GoodsStoreVO.class);
+////                }
+//                for (int g = 0; g < img.size(); g++) {
+//                    imgList.add(img.get(g));
+//                }
+//            }
+//        }
+//        GoodsStore temp = new GoodsStore();
+//        for (int g = 0; g < goodsIds.size(); g++) {
+//            temp.setId(goodsIds.get(g));
+//            temp.setImg(imgList);
+//            goodsStore.add(temp);
+//        }
+            for (int i = 0; i < newBeeMallGoods.size(); i++) {
+                List<String> img = goodsMapper.selectImgByGoodsId((newBeeMallGoods.get(i)).getGoodsId());
 
-
-            if (!newBeeMallGoods.isEmpty()) {
-                goodsIds = newBeeMallGoods.stream().map(NewBeeMallGoods::getGoodsId).collect(Collectors.toList());
-            }
-
-
-            for (int i = 0; i < goodsIds.size(); i++) {
-
-                List<String> img = goodsMapper.selectImgByGoodsId(goodsIds.get(i));
-
-                for (int g = 0; g < img.size(); g++) {
-                    imgList.add(img.get(g));
+                GoodsStore goodsStrore = new GoodsStore();
+                if (img.size() > 0) {
+                    goodsStrore.setId((newBeeMallGoods.get(i)).getGoodsId());
+                    goodsStrore.setImg(img);
+                    goodsStore.add(goodsStrore);
+                    goodsStoreVO = BeanUtil.copyList(goodsStoreVO, GoodsStoreVO.class);
                 }
             }
-
-            GoodsStore temp = new GoodsStore();
-            for (int g = 0; g < goodsIds.size(); g++) {
-                temp.setId(goodsIds.get(g));
-                temp.setImg(imgList);
-                goodsStore.add(temp);
-            }
         }
-       return goodsStore;
+
+        return goodsStoreVO;
     }
 
 }

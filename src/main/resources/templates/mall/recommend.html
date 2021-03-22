@@ -18,15 +18,23 @@
 
 <div class="section">
     <div class="list">
-       <ul>
-       </ul>
+        <th:block th:each="item : ${goodsCategoryList}">
+                <em>
+                    <a href=" " th:href="@{'/recommend?categoryId='+${item.categoryId}}">
+                    <th:block th:text="${item.categoryName}"></th:block>
+                    </a>
+                </em>
+        </th:block>
     </div>
 </div>
 
 <div class="goods_item center">
     <div class="main">
-        <ul>
-        </ul>
+        <th:block th:each="item : ${goodsStore}">
+            <th:block th:each="img : ${item.img}">
+                <img th:src="@{${imgList.goodsCoverImg}}" style="width:10%">
+            </th:block>
+        </th:block>
     </div>
 </div>
 

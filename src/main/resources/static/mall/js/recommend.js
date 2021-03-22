@@ -1,31 +1,32 @@
 $(function () {
-    $('.list').on('change', function () {
-        $.ajax({
-            url: '/recommend',
-            success: function (result) {
-                var categoryList = "";
-                var goodsCategoryList = result.data.goodsCategoryList;
-                var length = goodsCategoryList.length;
-                if (result.resultCode == 200) {
-                    for (var i = 0; i < length; i++) {
-                        categoryList = '<li className=\"categoryLIst\" data-category-id=\"' + goodsCategoryList[i].categoryId + '\">'
-                            + '<a href=\"/recommend?categoryId=' + goodsCategoryList[i].categoryId + '\">'
-                            + '<div className=\"title-wrap\">'
-                            + '<em className=\"title\">' + goodsCategoryList[i].categoryName + '</em>'
-                            + '</div>'
-                            + '</a>'
-                            + '</li>'
-                    }
-                    ;
-                    $('.list').find('ul').html(categoryList);
-                } else {
-                    swal(result.message, {
-                        icon: "error",
-                    })
-                }
-            }
-        });
-    });
+    // // $('.list').on('change', function () {
+    //     $.ajax({
+    //         url: '/recommend',
+    //         success: function (result) {
+    //             var categoryList = "";
+    //             var goodsCategoryList = result.data.goodsCategoryList;
+    //             var length = goodsCategoryList.length;
+    //             if (result.resultCode == 200) {
+    //                 debugger;
+    //                 for (var i = 0; i < length; i++) {
+    //                     categoryList = '<li className=\"categoryLIst\" data-category-id=\"' + goodsCategoryList[i].categoryId + '\">'
+    //                         + '<a href=\"/recommend?categoryId=' + goodsCategoryList[i].categoryId + '\">'
+    //                         + '<div className=\"title-wrap\">'
+    //                         + '<em className=\"title\">' + goodsCategoryList[i].categoryName + '</em>'
+    //                         + '</div>'
+    //                         + '</a>'
+    //                         + '</li>'
+    //                 }
+    //                 ;
+    //                 $('.list').find('ul').html(categoryList);
+    //             } else {
+    //                 swal(result.message, {
+    //                     icon: "error",
+    //                 })
+    //             }
+    //         }
+    //     });
+    // // });
 
     $('.main').on('change', function () {
         $.ajax({

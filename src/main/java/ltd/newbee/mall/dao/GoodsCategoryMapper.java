@@ -41,5 +41,5 @@ public interface GoodsCategoryMapper {
     List<GoodsCategory> selectByCategoryLevelTwo();
 
 //    added by sasaki 2021/03/19 for goodsStore
-    List<GoodsCategory> selectLevelThreeList();
+    List<GoodsCategory> selectLevelThreeList(Long parentId);
 }

@@ -8,6 +8,7 @@
  */
 package ltd.newbee.mall.service;
 
+import ltd.newbee.mall.controller.vo.GoodsStoreVO;
 import ltd.newbee.mall.entity.GoodsCategory;
 import ltd.newbee.mall.entity.GoodsStore;
 import ltd.newbee.mall.entity.NewBeeMallGoods;
@@ -126,5 +127,5 @@ public interface NewBeeMallGoodsService {
      * @param
      * @return
      */
-    List<GoodsStore> getGoodsByCategoryId(GoodsCategory goodsCategory);
+    List<GoodsStoreVO> getGoodsByCategoryId(Long categoryId);
 }

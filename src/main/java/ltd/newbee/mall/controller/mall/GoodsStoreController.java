@@ -27,42 +27,33 @@ public class GoodsStoreController {
     private NewBeeMallGoodsService newBeeMallGoodsService;
     @Resource
     private NewBeeMallCategoryService newBeeMallCategoryService;
-    @Resource
-    private NewBeeMallGoodsMapper goodsMapper;
 
-    @GetMapping({"/recommend"})
-    public String recommend() {
-        return "mall/recommend";
-    }
+//    @GetMapping({"/recommend"})
+//    public String recommend() {
+//        return "mall/recommend";
+//    }
 
-    @RequestMapping(value = "/recommend", method = RequestMethod.POST)
-    @ResponseBody
-    public Result GoodsStore(HttpServletRequest request, Long categoryId) {
-
-        List<Long> categoryIdList;
-
-        List<GoodsStore> goodsStore = null;
+    @GetMapping({ "/recommend","/recommend?{categoryId}", "/recommend.html"})
+    public String GoodsStore(HttpServletRequest request, Long categoryId) {
 
         List<GoodsCategory> goodsCategoryList = newBeeMallCategoryService.fetchSecLeveLCateList();
 
-        categoryIdList = goodsCategoryList.stream().map(GoodsCategory::getCategoryId).collect(Collectors.toList());
+//        for (int i = 0; i < categoryIdList.size(); i++) {
+//            categoryId = categoryIdList.get(i);
 
-        for (int i = 0; i < categoryIdList.size(); i++) {
-            categoryId = categoryIdList.get(i);
+//            Long categoryId = 19l;
+//            for (int n = 0; n < categoryIdList.size(); n++) {
+
+        if(categoryId == null ){
+            categoryId = 19l ;
         }
+        List<GoodsStoreVO> goodsImg = newBeeMallGoodsService.getGoodsByCategoryId(categoryId);
 
-        for (int n = 0;n<categoryIdList.size()-1;n++) {
-
-            if (categoryId == null) {
-                 goodsStore = newBeeMallGoodsService.getGoodsByCategoryId(goodsCategoryList.get(0));
-            } else {
-                 goodsStore = newBeeMallGoodsService.getGoodsByCategoryId(goodsCategoryList.get(n+1));
-            }
-        }
-        Map result = new HashMap();
-        result.put("goodsCategoryList",goodsCategoryList);
-        result.put("goodsStore",goodsStore);
-
-        return ResultGenerator.genSuccessResult(result);
+        request.setAttribute("goodsCategoryList",goodsCategoryList);
+        request.setAttribute("goodsImg",goodsImg);
+//        Map result = new HashMap();
+//        result.put("goodsCategoryList",goodsCategoryList);
+//        result.put("goodsStore",goodsStore);
+        return "mall/recommend";
     }
 }
