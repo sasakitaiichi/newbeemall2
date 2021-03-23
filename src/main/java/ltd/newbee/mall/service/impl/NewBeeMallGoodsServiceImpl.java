@@ -185,6 +185,8 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
     @Override
     public List<GoodsStoreVO> getGoodsByCategoryId(Long categoryId) {
 
+        List<String> imgList = new ArrayList<>();
+
         List<GoodsStoreVO> goodsStoreVO = new ArrayList<>();
 
         List<NewBeeMallGoods> newBeeMallGoods = null;
@@ -232,12 +234,15 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
             for (int i = 0; i < newBeeMallGoods.size(); i++) {
                 List<String> img = goodsMapper.selectImgByGoodsId((newBeeMallGoods.get(i)).getGoodsId());
 
+//                for (int j = 0;j<img.size();j++) {
+//                    imgList = img.get(j).
+//                }
                 GoodsStore goodsStrore = new GoodsStore();
                 if (img.size() > 0) {
                     goodsStrore.setId((newBeeMallGoods.get(i)).getGoodsId());
                     goodsStrore.setImg(img);
                     goodsStore.add(goodsStrore);
-                    goodsStoreVO = BeanUtil.copyList(goodsStoreVO, GoodsStoreVO.class);
+                    goodsStoreVO = BeanUtil.copyList(goodsStore, GoodsStoreVO.class);
                 }
             }
         }
