@@ -51,6 +51,7 @@ public class GoodsStoreController {
 
         request.setAttribute("goodsCategoryList",goodsCategoryList);
         request.setAttribute("goodsImg",goodsImg);
+        request.setAttribute("categoryId",categoryId);
 //        Map result = new HashMap();
 //        result.put("goodsCategoryList",goodsCategoryList);
 //        result.put("goodsStore",goodsStore);
