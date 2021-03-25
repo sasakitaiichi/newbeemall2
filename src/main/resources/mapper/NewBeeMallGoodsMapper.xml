@@ -466,13 +466,4 @@
         where  goods_category_id = #{goodsCategoryId,jdbcType=BIGINT}
     </select>
 
-<!--    added by sasaki 2021/03/19 for goodsStore-->
-    <select id="selectImgByGoodsId"  resultType="java.lang.String">
-        select goods_cover_img
-        from tb_newbee_mall_goods_info_carousel
-        where goods_id = #{goodsId，jdbcType=BIGINT}
-        order by goods_id asc
-            limit 5
-    </select>
-
 </mapper>

@@ -2,9 +2,7 @@ package ltd.newbee.mall.controller.mall;
 
 import ltd.newbee.mall.controller.vo.GoodsStoreVO;
 import ltd.newbee.mall.dao.NewBeeMallGoodsMapper;
-import ltd.newbee.mall.entity.GoodsCategory;
-import ltd.newbee.mall.entity.GoodsStore;
-import ltd.newbee.mall.entity.NewBeeMallGoods;
+import ltd.newbee.mall.entity.*;
 import ltd.newbee.mall.service.NewBeeMallCategoryService;
 import ltd.newbee.mall.service.NewBeeMallGoodsService;
 import ltd.newbee.mall.util.Result;
@@ -57,4 +55,27 @@ public class GoodsStoreController {
 //        result.put("goodsStore",goodsStore);
         return "mall/recommend";
     }
+
+    @PostMapping({"/recommendAjax"})
+    @ResponseBody
+    public Result everyGoodsStoreControllerCall(@RequestBody GoodsIdCatId goodIdCatId, HttpServletRequest request ) {
+
+        System.out.println(goodIdCatId);
+
+        List<GoodsStoreVO> goodsImg = newBeeMallGoodsService.getGoodsByCategoryId(goodIdCatId.getCategoryId());//categoryId別の商品全部
+
+        List<GoodsStoreVO> newGoodsImg = goodsImg.stream().filter(item -> !(goodIdCatId.getGoodsArray()).contains(item.getGoodsId())).collect(Collectors.toList());//categoryId別list残っている商品
+
+        List<Long> goodsIds = newGoodsImg.stream().map(GoodsStoreVO::getGoodsId).collect(Collectors.toList());//categoryId別list残っている商品のid
+
+        List<GoodsIdCatId> list = new ArrayList<>();
+        for (int i = 0;i<2;i++) {
+            GoodsIdCatId goodsIdCatId = new GoodsIdCatId();
+            goodsIdCatId.setCategoryId(goodIdCatId.getCategoryId());
+            goodsIdCatId.setGoodsArray(goodsIds);
+            list.add(goodsIdCatId);
+        }
+        return ResultGenerator.genSuccessResult(list);
+    };
+
 }

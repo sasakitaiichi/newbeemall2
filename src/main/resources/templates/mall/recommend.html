@@ -24,13 +24,14 @@
 
 
 <div class="section" style="width: 100%">
-    <div class="list" >
+    <div class="list">
         <th:block th:each="item : ${goodsCategoryList}">
             <div class="title" style="float: left;">
                 <div th:class="${ categoryId == null ||categoryId == item.categoryId ?'active':''}">
                     <dt>
                         <em>
-                            <a href=" " th:href="@{'/recommend?categoryId='+${item.categoryId}}" style="font-style:normal;">
+                            <a th:categoryId="${item.categoryId}" href=" "
+                               th:href="@{'/recommend?categoryId='+${item.categoryId}}" style="font-style:normal;">
                                 <th:block th:text="${item.categoryName}">
                                 </th:block>
                             </a>
@@ -44,15 +45,30 @@
 
 <div class="goods_item center" style="width:100%;">
     <div class="main">
-        <ul>
-            <li th:each="item : ${goodsImg}">
-                <th:block th:each="img : ${item.img}">
-                    <img width="90" height="90" th:src="@{${img}}">
+        <th:block th:each="item : ${goodsImg}">
+            <div class="goodsList">
+                <th:block th:each="img : ${item.goodsCoverImg}">
+                    <!--                    <th:block th:each="imgList : ${img.goodsCoverImg}">-->
+
+                    <img th:goodsId="${item.goodsId}" width="90" height="90" th:src="@{${img}}">
+
+                    <!--                   </th:block>-->
                 </th:block>
-            </li>
-        </ul>
+            </div>
+        </th:block>
     </div>
 </div>
+
+<!--<div class="goodslistcomplete">-->
+<!--    <th:block th:each="goodsImg : ${goodsImgFive}">-->
+<!--        <div class="goodslist" style="float:left;">-->
+<!--            <th:block th:each="imgFive : ${goodsImg.img}">-->
+<!--                < img th:goodsId="${goodsImg.goodsId}"-->
+<!--                id = "orderItemString" th:src="@{${imgFive}}" style="float:left;text-align: center;width:25%">-->
+<!--            </th:block>-->
+<!--        </div>-->
+<!--    </th:block>-->
+<!--</div>-->
 
 <div class="scrollDown">
     <p id="scroll-to"></p>

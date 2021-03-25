@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ltd.newbee.mall.dao.GoodsStoreMapper">
+<!--    <resultMap id="BaseResultMap" type="ltd.newbee.mall.entity.NewBeeMallGoods">-->
+<!--        <id column="goods_id" jdbcType="BIGINT" property="goodsId"/>-->
+<!--        <id column="goods_cover_img" jdbcType="VARCHAR" property="goodsCoverImg"/>-->
+<!--    </resultMap>-->
+
+<!--    <sql id="Base_Column_List">-->
+<!--        goods_id-->
+<!--       , goods_cover_img-->
+<!--    </sql>-->
+
+
+<!--&lt;!&ndash;    added by sasaki 2021/03/19 for goodsStore&ndash;&gt;-->
+<!--    <select id="selectImgByGoodsId"  resultMap="BaseResultMap">-->
+<!--        select goods_id,goods_cover_img-->
+<!--        from tb_newbee_mall_goods_info_carousel-->
+<!--        where goods_id = #{goodsId，jdbcType=BIGINT}-->
+<!--            limit 5-->
+<!--    </select>-->
+    <resultMap id="BaseResultMap" type="ltd.newbee.mall.entity.GoodsStoreImg">
+        <id column="goods_id" jdbcType="BIGINT" property="goodsId"/>
+        <id column="goods_cover_img" jdbcType="VARCHAR" property="goodsCoverImg"/>
+    </resultMap>
+
+
+    <select id="selectImgByGoodsId"  resultType="java.lang.String">
+            select goods_cover_img
+            from tb_newbee_mall_goods_info_carousel
+            where goods_id = #{goodsId，jdbcType=BIGINT}
+                limit 5
+        </select>
+
+
+</mapper>

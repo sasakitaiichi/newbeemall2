@@ -1,10 +1,9 @@
 package ltd.newbee.mall.entity;
 
-import java.util.List;
-
-public class GoodsStore {
-
+public class GoodsStoreImg {
     private Long goodsId;
+
+    private String goodsCoverImg;
 
     public Long getGoodsId() {
         return goodsId;
@@ -14,22 +13,19 @@ public class GoodsStore {
         this.goodsId = goodsId;
     }
 
-    public List<String> getGoodsCoverImg() {
+    public String getGoodsCoverImg() {
         return goodsCoverImg;
     }
 
-    public void setGoodsCoverImg(List<String> goodsCoverImg) {
+    public void setGoodsCoverImg(String goodsCoverImg) {
         this.goodsCoverImg = goodsCoverImg;
     }
 
-    private List<String> goodsCoverImg;
-
     @Override
     public String toString() {
-        return "GoodsStore{" +
+        return "GoodsStoreImg{" +
                 "goodsId=" + goodsId +
-                ", goodsCoverImg=" + goodsCoverImg +
+                ", goodsCoverImg='" + goodsCoverImg + '\'' +
                 '}';
     }
-
 }

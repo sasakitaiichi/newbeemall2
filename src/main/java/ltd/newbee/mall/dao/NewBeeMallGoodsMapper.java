@@ -9,6 +9,7 @@
 package ltd.newbee.mall.dao;
 
 import ltd.newbee.mall.entity.NewBeeMallGoods;
+import ltd.newbee.mall.entity.GoodsStore;
 import ltd.newbee.mall.entity.StockNumDTO;
 import ltd.newbee.mall.util.PageQueryUtil;
 import org.apache.ibatis.annotations.Param;
@@ -61,7 +62,6 @@ public interface NewBeeMallGoodsMapper {
     //added by sasaki 2021/03/19 for goodsStore
     List<NewBeeMallGoods> findNewBeeMallGoodsByCategoryId(Long categoryId);
 
-    //added by sasaki 2021/03/19 for goodsStore
-    List<String> selectImgByGoodsId(Long goodsId);
+
 
 }

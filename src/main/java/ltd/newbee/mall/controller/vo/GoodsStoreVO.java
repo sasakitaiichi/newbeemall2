@@ -5,23 +5,23 @@ import java.util.List;
 
 public class GoodsStoreVO implements Serializable {
 
-    private Long id;
+    private Long goodsId;
 
-    public Long getId() {
-        return id;
+    private List<String> goodsCoverImg;
+
+    public Long getGoodsId() {
+        return goodsId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setGoodsId(Long goodsId) {
+        this.goodsId = goodsId;
     }
 
-    public List<String> getImg() {
-        return img;
+    public List<String> getGoodsCoverImg() {
+        return goodsCoverImg;
     }
 
-    public void setImg(List<String> img) {
-        this.img = img;
+    public void setGoodsCoverImg(List<String> goodsCoverImg) {
+        this.goodsCoverImg = goodsCoverImg;
     }
-
-    private List<String> img;
 }

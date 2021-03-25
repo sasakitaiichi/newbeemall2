@@ -8,30 +8,25 @@
  */
 package ltd.newbee.mall.service.impl;
 
-import com.fasterxml.jackson.databind.MappingIterator;
 import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.controller.vo.GoodsStoreVO;
 import ltd.newbee.mall.controller.vo.NewBeeMallSearchGoodsVO;
 import ltd.newbee.mall.dao.GoodsCategoryMapper;
+import ltd.newbee.mall.dao.GoodsStoreMapper;
 import ltd.newbee.mall.dao.NewBeeMallGoodsMapper;
-import ltd.newbee.mall.entity.GoodsCategory;
-import ltd.newbee.mall.entity.GoodsStore;
-import ltd.newbee.mall.entity.NewBeeMallGoods;
+import ltd.newbee.mall.entity.*;
 import ltd.newbee.mall.service.NewBeeMallGoodsService;
 import ltd.newbee.mall.util.BeanUtil;
 import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.PageResult;
-import ltd.newbee.mall.util.ResultGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
@@ -40,6 +35,8 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
     private NewBeeMallGoodsMapper goodsMapper;
     @Autowired
     private GoodsCategoryMapper goodsCategoryMapper;
+    @Autowired
+    private GoodsStoreMapper goodsStoreMapper;
 
     public NewBeeMallGoodsServiceImpl() throws FileNotFoundException {
     }
@@ -185,8 +182,6 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
     @Override
     public List<GoodsStoreVO> getGoodsByCategoryId(Long categoryId) {
 
-        List<String> imgList = new ArrayList<>();
-
         List<GoodsStoreVO> goodsStoreVO = new ArrayList<>();
 
         List<NewBeeMallGoods> newBeeMallGoods = null;
@@ -232,16 +227,15 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
 //            goodsStore.add(temp);
 //        }
             for (int i = 0; i < newBeeMallGoods.size(); i++) {
-                List<String> img = goodsMapper.selectImgByGoodsId((newBeeMallGoods.get(i)).getGoodsId());
+                List<String> img = goodsStoreMapper.selectImgByGoodsId(newBeeMallGoods.get(i).getGoodsId());
 
-//                for (int j = 0;j<img.size();j++) {
-//                    imgList = img.get(j).
-//                }
-                GoodsStore goodsStrore = new GoodsStore();
+                System.out.println((newBeeMallGoods.get(i)).getGoodsId());
+
+                GoodsStore temp = new GoodsStore();
                 if (img.size() > 0) {
-                    goodsStrore.setId((newBeeMallGoods.get(i)).getGoodsId());
-                    goodsStrore.setImg(img);
-                    goodsStore.add(goodsStrore);
+                    temp.setGoodsId((newBeeMallGoods.get(i)).getGoodsId());
+                    temp.setGoodsCoverImg(img);
+                    goodsStore.add(temp);
                     goodsStoreVO = BeanUtil.copyList(goodsStore, GoodsStoreVO.class);
                 }
             }
