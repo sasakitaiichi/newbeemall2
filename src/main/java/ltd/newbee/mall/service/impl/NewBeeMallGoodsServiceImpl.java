@@ -21,6 +21,7 @@ import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.io.*;
@@ -242,6 +243,22 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
         }
 
         return goodsStoreVO;
+    }
+
+    @Override
+    @Transactional
+    public String updateGoods(NewBeeMallGoods newBeeMallGoods) {
+        NewBeeMallGoods temp = goodsMapper.selectByPrimaryKey(newBeeMallGoods.getGoodsId());
+        if (temp != null) {
+            temp.setGoodsName(newBeeMallGoods.getGoodsName());
+            temp.setGoodsCoverImg(newBeeMallGoods.getGoodsCoverImg());
+            temp.setUpdateTime(new Date());
+            if (goodsMapper.updateByPrimaryKeySelective(temp) > 0) {
+                return ServiceResultEnum.SUCCESS.getResult();
+            }
+            return ServiceResultEnum.DB_ERROR.getResult();
+        }
+        return ServiceResultEnum.DATA_NOT_EXIST.getResult();
     }
 
 }

@@ -4,23 +4,23 @@
 <head th:replace="mall/header::head-fragment('NewBee商城-搜索','search')">
 </head>
 <body>
-<header th:replace="mall/header::header-fragment"></header>
+<header th:replace="admin/header::header-fragment">
+</header>
 <!--&lt;!&ndash; nav &ndash;&gt;-->
 <!--<nav th:replace="mall/header::nav-fragment"></nav>-->
-<header id="goodsStore">
-    <div class="findword">"
-        <style type="text/css">
-            h1 {
-                color: yellow;
-                text-shadow: 5px 5px 5px #ff0095;
-                font-size: 50px;
-            }
-        </style>
-        <h1>
-            <th:block th:text="每日好物">每日好物</th:block>
-        </h1>
-    </div>
-</header>
+
+<div class="findword">"
+    <style type="text/css">
+        h1 {
+            color: yellow;
+            text-shadow: 5px 5px 5px #ff0095;
+            font-size: 50px;
+        }
+    </style>
+    <h1>
+        <th:block th:text="每日好物">每日好物</th:block>
+    </h1>
+</div>
 
 
 <div class="section" style="width: 100%">
@@ -50,7 +50,8 @@
                 <th:block th:each="img : ${item.goodsCoverImg}">
                     <!--                    <th:block th:each="imgList : ${img.goodsCoverImg}">-->
 
-                    <img th:goodsId="${item.goodsId}" width="90" height="90" th:src="@{${img}}">
+                    <img th:goodsId="${item.goodsId}" width="90" height="90" th:src="@{${img}}"
+                         th:onclick="'orderEdit('+${item.goodsId}+')'">
 
                     <!--                   </th:block>-->
                 </th:block>
@@ -59,19 +60,55 @@
     </div>
 </div>
 
-<!--<div class="goodslistcomplete">-->
-<!--    <th:block th:each="goodsImg : ${goodsImgFive}">-->
-<!--        <div class="goodslist" style="float:left;">-->
-<!--            <th:block th:each="imgFive : ${goodsImg.img}">-->
-<!--                < img th:goodsId="${goodsImg.goodsId}"-->
-<!--                id = "orderItemString" th:src="@{${imgFive}}" style="float:left;text-align: center;width:25%">-->
-<!--            </th:block>-->
-<!--        </div>-->
-<!--    </th:block>-->
-<!--</div>-->
+<div class="content">
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="orderInfoModal" tabindex="-1" role="dialog"
+         aria-labelledby="orderInfoModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h6 class="modal-title" id="orderInfoModalLabel">Modal</h6>
+                </div>
+                <div class="modal-body">
+                    <form id="##">
+                        <div class="form-group">
+                            <div class="alert alert-danger" id="edit-error-msg" style="display: none;">
+                                错误信息展示栏。
+                            </div>
+                        </div>
+                        <input type="hidden" id="orderId">
+                        <div class="form-group">
+                            <!--                            <label for="totalPrice" class="control-label">订单价格:&nbsp;&nbsp;&nbsp;&nbsp;</label>-->
+                            <p th:text="商品ID"></p>
+                            <input type="number" class="form-control" id="goodsIdEdit" name="totalPrice"
+                                   placeholder="" required="true">
+                        </div>
+                        <div class="form-group">
+                            <!--                            <label for="totalPrice" class="control-label">订单价格:&nbsp;&nbsp;&nbsp;&nbsp;</label>-->
+                            <p th:text="商品名稱"></p>
+                            <input type="text" class="form-control" id="goodsNameEdit" name="totalPrice"
+                                   placeholder="请输入商品名稱" required="true">
+                        </div>
+                        <div class="form-group">
+                            <!--                            <label for="userAddress"-->
+                            <!--                                   class="control-label">收件人信息:&nbsp;&nbsp;&nbsp;&nbsp;</label>-->
+                            <p th:text="商品圖片"></p>
+                            <input type="text" class="form-control" id="imgEdit" name="userAddress"
+                                   placeholder="请上傳圖片" value="##">
+                        </div>
 
-<div class="scrollDown">
-    <p id="scroll-to"></p>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="saveButton">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
 </div>
 
 
@@ -103,8 +140,18 @@
 </style>
 
 <div th:replace="mall/footer::footer-fragment"></div>
-jQuery
+<!-- jQuery -->
 <script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/admin/dist/js/adminlte.min.js}"></script>
+<!-- jqgrid -->
+<script th:src="@{/admin/plugins/jqgrid-5.5.2/jquery.jqGrid.min.js}"></script>
+<script th:src="@{/admin/plugins/jqgrid-5.5.2/grid.locale-cn.js}"></script>
+<!-- sweetalert -->
+<script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
+<script th:src="@{/admin/dist/js/public.js}"></script>
 <script th:src="@{/mall/js/search.js}" type="text/javascript"></script>
 <script th:src="@{/mall/js/recommend.js}" type="text/javascript"></script>
 </body>

@@ -1,5 +1,6 @@
 package ltd.newbee.mall.controller.mall;
 
+import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.controller.vo.GoodsStoreVO;
 import ltd.newbee.mall.dao.NewBeeMallGoodsMapper;
 import ltd.newbee.mall.entity.*;
@@ -25,13 +26,15 @@ public class GoodsStoreController {
     private NewBeeMallGoodsService newBeeMallGoodsService;
     @Resource
     private NewBeeMallCategoryService newBeeMallCategoryService;
+    @Resource
+    private NewBeeMallGoodsMapper goodsMapper;
 
 //    @GetMapping({"/recommend"})
 //    public String recommend() {
 //        return "mall/recommend";
 //    }
 
-    @GetMapping({ "/recommend","/recommend?{categoryId}", "/recommend.html"})
+    @GetMapping({"/recommend", "/recommend?{categoryId}", "/recommend.html"})
     public String GoodsStore(HttpServletRequest request, Long categoryId) {
 
         List<GoodsCategory> goodsCategoryList = newBeeMallCategoryService.fetchSecLeveLCateList();
@@ -42,14 +45,14 @@ public class GoodsStoreController {
 //            Long categoryId = 19l;
 //            for (int n = 0; n < categoryIdList.size(); n++) {
 
-        if(categoryId == null ){
-            categoryId = 19l ;
+        if (categoryId == null) {
+            categoryId = 19l;
         }
         List<GoodsStoreVO> goodsImg = newBeeMallGoodsService.getGoodsByCategoryId(categoryId);
 
-        request.setAttribute("goodsCategoryList",goodsCategoryList);
-        request.setAttribute("goodsImg",goodsImg);
-        request.setAttribute("categoryId",categoryId);
+        request.setAttribute("goodsCategoryList", goodsCategoryList);
+        request.setAttribute("goodsImg", goodsImg);
+        request.setAttribute("categoryId", categoryId);
 //        Map result = new HashMap();
 //        result.put("goodsCategoryList",goodsCategoryList);
 //        result.put("goodsStore",goodsStore);
@@ -58,7 +61,7 @@ public class GoodsStoreController {
 
     @PostMapping({"/recommendAjax"})
     @ResponseBody
-    public Result everyGoodsStoreControllerCall(@RequestBody GoodsIdCatId goodIdCatId, HttpServletRequest request ) {
+    public Result GoodsStoreControllerCall(@RequestBody GoodsIdCatId goodIdCatId, HttpServletRequest request) {
 
         System.out.println(goodIdCatId);
 
@@ -69,13 +72,37 @@ public class GoodsStoreController {
         List<Long> goodsIds = newGoodsImg.stream().map(GoodsStoreVO::getGoodsId).collect(Collectors.toList());//categoryId別list残っている商品のid
 
         List<GoodsIdCatId> list = new ArrayList<>();
-        for (int i = 0;i<2;i++) {
+        for (int i = 0; i < 2; i++) {
             GoodsIdCatId goodsIdCatId = new GoodsIdCatId();
             goodsIdCatId.setCategoryId(goodIdCatId.getCategoryId());
             goodsIdCatId.setGoodsArray(goodsIds);
             list.add(goodsIdCatId);
         }
         return ResultGenerator.genSuccessResult(list);
-    };
+    }
+
+    ;
+
+    @GetMapping({"/recommendAjax/{goodsId}"})
+    @ResponseBody
+    public Result getGoodsById(@PathVariable("goodsId") Long goodsId) {
+
+        List<NewBeeMallGoods> list = goodsMapper.findGoodsById(goodsId);
+
+//        System.out.println(list);
+
+        return ResultGenerator.genSuccessResult(list);
+    }
+
+    @RequestMapping(value = "/recommendEdit", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateGoodsById(@RequestBody NewBeeMallGoods newBeeMallGoods) {
+        String result = newBeeMallGoodsService.updateGoods(newBeeMallGoods);
+        if (ServiceResultEnum.SUCCESS.getResult().equals(result)) {
+            return ResultGenerator.genSuccessResult();
+        } else {
+            return ResultGenerator.genFailResult(result);
+        }
+    }
 
 }

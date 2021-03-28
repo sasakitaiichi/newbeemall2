@@ -62,6 +62,9 @@ public interface NewBeeMallGoodsMapper {
     //added by sasaki 2021/03/19 for goodsStore
     List<NewBeeMallGoods> findNewBeeMallGoodsByCategoryId(Long categoryId);
 
+    //added 2021/03/26 sasaki for goodsStore
+    List<NewBeeMallGoods> findGoodsById(Long goodsId);
+
 
 
 }

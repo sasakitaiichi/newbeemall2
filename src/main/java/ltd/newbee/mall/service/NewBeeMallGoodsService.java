@@ -12,6 +12,7 @@ import ltd.newbee.mall.controller.vo.GoodsStoreVO;
 import ltd.newbee.mall.entity.GoodsCategory;
 import ltd.newbee.mall.entity.GoodsStore;
 import ltd.newbee.mall.entity.NewBeeMallGoods;
+import ltd.newbee.mall.entity.NewBeeMallOrder;
 import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.PageResult;
 
@@ -128,4 +129,13 @@ public interface NewBeeMallGoodsService {
      * @return
      */
     List<GoodsStoreVO> getGoodsByCategoryId(Long categoryId);
+
+    //added by sasaki 2021/03/28 for goodsStore
+    /**
+     * 修改商品信息
+     *
+     * @param
+     * @return
+     */
+    String updateGoods(NewBeeMallGoods newBeeMallGoods);
 }
